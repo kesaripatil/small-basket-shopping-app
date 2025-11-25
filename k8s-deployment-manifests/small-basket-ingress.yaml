@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  name: small-basket-ingress
+  namespace: small-basket
+spec:
+  ingressClassName: nginx 
+  rules:
+    - host: dev.small-basket.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: small-basket-frontend-svc
+                port:
+                  number: 3000
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: small-basket-backend
+                port:
+                  number: 5000

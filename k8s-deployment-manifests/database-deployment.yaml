@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: small-basket-pv
+  namespace: small-basket
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/data/mysql
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: small-basket-pvc
+  namespace: small-basket
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: small-basket-database
+  namespace: small-basket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: small-basket-database
+  template:
+    metadata:
+      labels: 
+        app: small-basket-database
+        project: small-basket
+    spec:
+      containers:
+        - name: mysql
+          image: kesaripatil/small-basket-database:latest
+          ports: 
+          - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_ROOT_PASSWORD
+          volumeMounts: 
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: small-basket-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: small-basket-database-svc
+  namespace: small-basket
+spec:
+  selector:
+    app: small-basket-database
+  ports:
+    - port: 3306
+      targetPort: 3306
+  clusterIP: None

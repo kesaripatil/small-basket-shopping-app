@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: small-basket-frontend
+  namespace: small-basket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: small-basket-frontend
+  template:
+    metadata:
+      labels:
+        app: small-basket-frontend
+        project: small-basket
+    spec:
+      containers:
+        - name: web
+          image: kesaripatil/small-basket-frontend
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: small-basket-frontend-svc
+  namespace: small-basket
+spec:
+  selector:
+    app: small-basket-frontend
+  ports:
+    - port: 3000
+      targetPort: 3000
+  type: ClusterIP

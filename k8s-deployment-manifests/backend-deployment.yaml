@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+metadata:
+  name: small-basket-backend
+  namespace: small-basket
+kind: Deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: small-basket-backend
+  template:
+    metadata:
+      labels:
+        app: small-basket-backend
+        project: small-basket
+    spec:
+      containers:
+        - name: api
+          image: kesaripatil/small-basket-backend
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: DB_HOST
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: DB_USER
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: DB_NAME
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_ROOT_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: small-basket-backend
+  namespace: small-basket
+spec:
+  selector:
+    app: small-basket-backend
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: ClusterIP
