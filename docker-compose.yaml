@@ -23,7 +23,10 @@ services:
       - db
 
   frontend:
-    build: ./small-basket-frontend
+    build:
+      context: ./small-basket-frontend
+      args:
+        REACT_APP_API_URL: http://localhost:5000
     container_name: small-basket-frontend
     ports:
       - "3000:3000"

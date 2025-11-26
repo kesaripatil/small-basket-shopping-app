@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: kesaripatil/small-basket-backend
+          image: kesaripatil/small-basket-backend:v1
           ports:
             - containerPort: 5000
           env:

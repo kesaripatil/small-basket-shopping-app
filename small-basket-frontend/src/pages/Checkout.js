@@ -11,7 +11,7 @@ export default function Checkout() {
 
   useEffect(() => {
     const fetchCheckout = async () => {
-      const res = await fetch(`http://localhost:5000/api/checkout/${userId}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/checkout/${userId}`);
       const data = await res.json();
       setItems(data);
       setTotal(data.reduce((sum, item) => sum + Number(item.total_price), 0));
@@ -21,7 +21,7 @@ export default function Checkout() {
 
   const handlePurchase = async () => {
     if (items.length === 0) return;
-    await fetch('http://localhost:5000/api/checkout/pay', {
+    await fetch(`${process.env.REACT_APP_API_URL}/api/checkout/pay`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId })

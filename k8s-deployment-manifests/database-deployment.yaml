@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: kesaripatil/small-basket-database:latest
+          image: kesaripatil/small-basket-database:v1
           ports: 
           - containerPort: 3306
           env:

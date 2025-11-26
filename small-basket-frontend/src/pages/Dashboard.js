@@ -10,11 +10,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const vegRes = await fetch('http://localhost:5000/api/vegetables');
+      const vegRes = await fetch(`${process.env.REACT_APP_API_URL}/api/vegetables`);
       const vegData = await vegRes.json();
       setVegetables(vegData);
 
-      const cartRes = await fetch(`http://localhost:5000/api/checkout/${userId}`);
+      const cartRes = await fetch(`${process.env.REACT_APP_API_URL}/api/checkout/${userId}`);
       const cartData = await cartRes.json();
       const cartState = {};
       cartData.forEach(item => {
@@ -48,7 +48,7 @@ export default function Dashboard() {
       total: item.price * item.quantity
     }));
 
-    await fetch('http://localhost:5000/api/checkout', {
+    await fetch(`${process.env.REACT_APP_API_URL}/api/checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items, userId })

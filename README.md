@@ -10,13 +10,22 @@ The application is containerized with Docker and ready for deployment on Kuberne
 ```
 small-basket/
 
-├── docker-compose.yaml        # Compose file to run full stack locally
+├── docker-compose.yaml                  # Compose file to run full stack locally
 
-├── small-basket-database/     # MySQL service with schema initialization
+├── k8s-deployment-manifests/            # Kubernetes manifests for cluster deployment
+│   ├── backend-deployment.yaml          # Backend Deployment + Service
+│   ├── database-deployment.yaml         # Database Deployment + Service
+│   ├── frontend-deployment.yaml         # Frontend Deployment + Service
+│   ├── db-secret.yaml                   # Secret for DB credentials
+│   ├── small-basket-namespace.yaml      # Namespace definition
+│   ├── small-basket-ingress.yaml        # Ingress for routing frontend + backend
+│   └── small-basket-healthz-ingress.yaml# Ingress for health checks
+
+├── small-basket-database/               # MySQL service with schema initialization
 │   ├── init.sql
 │   └── Dockerfile
 
-├── small-basket-backend/      # Node.js + Express API
+├── small-basket-backend/                # Node.js + Express API
 │   ├── server.js
 │   ├── db.js
 │   ├── routes/
@@ -24,9 +33,10 @@ small-basket/
 │   ├── .env
 │   └── Dockerfile
 
-├── small-basket-frontend/     # React frontend
+├── small-basket-frontend/               # React frontend
 │   ├── public/
 │   ├── src/
+|   |   |__ App.css 
 │   │   ├── App.js
 │   │   ├── index.js
 │   │   ├── pages/
@@ -36,8 +46,12 @@ small-basket/
 │   │   │   └── Success.js
 │   └── Dockerfile
 
-└── README.md                  # Project documentation
+├── deploy-small-basket-on-k8s.sh        # Script to apply manifests in sequence
+├── cleanup-small-basket-on-k8s.sh       # Script to delete manifests in reverse order
+
+└── README.md                            # Project documentation
 ```
+
 ---
 
 ## 🚀 Microservices Overview
@@ -86,6 +100,36 @@ Backend → 5000
 
 Database → 3306
 
+---
+## 🚀 Kubernetes Deployment Scripts
+
+To simplify cluster operations, two helper scripts are included at the root:
+
+- `deploy-on-k8s.sh` → Applies all manifests in sequence:
+  1. Namespace
+  2. Secrets
+  3. Database, Backend, Frontend Deployments
+  4. Ingress
+  5. Healthcheck ingress
+
+- `cleanup-on-k8s.sh` → Deletes all manifests in reverse order for a clean teardown.
+
+### Usage
+Make scripts executable:
+```bash
+chmod +x deploy-on-k8s.sh cleanup-on-k8s.sh
+```
+
+### Run deployment:
+```bash
+./deploy-small-basket-on-k8s.sh
+```
+
+### Run cleanup:
+```bash
+./cleanup-small-basket-on-k8s.sh
+
+```
 ---
 
 ## ⚠️ Disclaimer

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: kesaripatil/small-basket-frontend
+          image: kesaripatil/small-basket-frontend:v1
           ports:
             - containerPort: 3000
 ---

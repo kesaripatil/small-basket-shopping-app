@@ -3,7 +3,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Checkout from './pages/Checkout';
 import Success from './pages/Success';
-
+import './App.css';
 function App() {
   return (
     <Router>
