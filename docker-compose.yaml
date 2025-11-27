@@ -1,13 +1,15 @@
 version: '3.8'
 services:
   db:
-    build: ./small-basket-database
+    image: mysql:8
     container_name: small-basket-database
     ports:
       - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: vegshop
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - ./small-basket-database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - small-basket-db-data:/var/lib/mysql
@@ -25,11 +27,11 @@ services:
   frontend:
     build:
       context: ./small-basket-frontend
-      args:
-        REACT_APP_API_URL: http://localhost:5000
     container_name: small-basket-frontend
     ports:
       - "3000:3000"
+    volumes:
+      - ./small-basket-frontend/public/config.js:/app/build/config.js:ro
     depends_on:
       - backend
 

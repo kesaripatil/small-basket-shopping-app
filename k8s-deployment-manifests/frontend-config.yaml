@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: small-basket
+data:
+  config.js: |
+    window._env_ = {
+      REACT_APP_API_URL: "http://dev.small-basket.com"
+    };
+

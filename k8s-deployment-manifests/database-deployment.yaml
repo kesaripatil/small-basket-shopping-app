@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: kesaripatil/small-basket-database:v1
+          image: mysql:8
           ports: 
           - containerPort: 3306
           env:
@@ -50,13 +50,33 @@ spec:
                 secretKeyRef:
                   name: db-secret
                   key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_PASSWORD
           volumeMounts: 
             - name: mysql-data
               mountPath: /var/lib/mysql
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: mysql-data
           persistentVolumeClaim:
             claimName: small-basket-pvc
+        - name: initdb
+          configMap:
+            name: mysql-initdb
 ---
 apiVersion: v1
 kind: Service

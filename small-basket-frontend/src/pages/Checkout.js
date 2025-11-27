@@ -8,10 +8,11 @@ export default function Checkout() {
 
   const userId = localStorage.getItem('userId');
   const username = localStorage.getItem('username');
+  const apiUrl = window._env_.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchCheckout = async () => {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/checkout/${userId}`);
+      const res = await fetch(`${apiUrl}/api/checkout/${userId}`);
       const data = await res.json();
       setItems(data);
       setTotal(data.reduce((sum, item) => sum + Number(item.total_price), 0));
@@ -21,7 +22,7 @@ export default function Checkout() {
 
   const handlePurchase = async () => {
     if (items.length === 0) return;
-    await fetch(`${process.env.REACT_APP_API_URL}/api/checkout/pay`, {
+    await fetch(`${apiUrl}/api/checkout/pay`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId })

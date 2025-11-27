@@ -7,14 +7,15 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const username = localStorage.getItem('username');
   const userId = localStorage.getItem('userId');
+  const apiUrl = window._env_.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchData = async () => {
-      const vegRes = await fetch(`${process.env.REACT_APP_API_URL}/api/vegetables`);
+      const vegRes = await fetch(`${apiUrl}/api/vegetables`);
       const vegData = await vegRes.json();
       setVegetables(vegData);
 
-      const cartRes = await fetch(`${process.env.REACT_APP_API_URL}/api/checkout/${userId}`);
+      const cartRes = await fetch(`${apiUrl}/api/checkout/${userId}`);
       const cartData = await cartRes.json();
       const cartState = {};
       cartData.forEach(item => {
@@ -48,7 +49,7 @@ export default function Dashboard() {
       total: item.price * item.quantity
     }));
 
-    await fetch(`${process.env.REACT_APP_API_URL}/api/checkout`, {
+    await fetch(`${apiUrl}/api/checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items, userId })

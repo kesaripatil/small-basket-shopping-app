@@ -8,6 +8,8 @@ kubectl apply -f k8s-deployment-manifests/small-basket-namespace.yaml
 
 # Step 2: Secrets
 kubectl apply -f k8s-deployment-manifests/db-secret.yaml
+kubectl apply -f k8s-deployment-manifests/vegdb-mysql-init-configmap.yaml
+kubectl apply -f k8s-deployment-manifests/frontend-config.yaml
 
 # Step 3: Deployments (database, backend, frontend)
 kubectl apply -f k8s-deployment-manifests/database-deployment.yaml

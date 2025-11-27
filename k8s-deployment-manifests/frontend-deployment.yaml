@@ -16,9 +16,17 @@ spec:
     spec:
       containers:
         - name: web
-          image: kesaripatil/small-basket-frontend:v1
+          image: kesaripatil/small-basket-frontend:v3
           ports:
             - containerPort: 3000
+          volumeMounts:
+            - name: frontend-config
+              mountPath: /app/build/config.js
+              subPath: config.js
+      volumes:
+        - name: frontend-config
+          configMap:
+            name: frontend-config
 ---
 apiVersion: v1
 kind: Service

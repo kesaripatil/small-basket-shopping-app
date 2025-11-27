@@ -4,12 +4,13 @@ import { useState } from 'react';
 export default function Login() {
   const [name, setName] = useState('');
   const navigate = useNavigate();
+  const apiUrl = window._env_.REACT_APP_API_URL;
 
   const handleLogin = () => {
     const regex = /^[A-Za-z ]+$/;
     if (!regex.test(name)) return alert('Only letters and spaces allowed');
 
-    fetch(`${process.env.REACT_APP_API_URL}/api/login`, {
+    fetch(`${apiUrl}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name })

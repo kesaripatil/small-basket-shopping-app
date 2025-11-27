@@ -24,22 +24,22 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: db-config
-                  key: DB_HOST
+                  key: MYSQL_HOST
             - name: DB_USER
               valueFrom:
-                configMapKeyRef:
-                  name: db-config
-                  key: DB_USER
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_USER
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
                   name: db-config
-                  key: DB_NAME
+                  key: MYSQL_DATABASE
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
                   name: db-secret
-                  key: MYSQL_ROOT_PASSWORD
+                  key: MYSQL_PASSWORD
 ---
 apiVersion: v1
 kind: Service

@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb
+  namespace: small-basket
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS vegshop;
+    USE vegshop;
+
+    CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(100) NOT NULL UNIQUE,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS vegetables (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(50) NOT NULL,
+      price DECIMAL(10,2) NOT NULL,
+      available BOOLEAN DEFAULT TRUE,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS checkout (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      vegetable_id INT NOT NULL,
+      quantity INT NOT NULL,
+      total_price DECIMAL(10,2) NOT NULL,
+      user_id INT NOT NULL,
+      paid BOOLEAN DEFAULT FALSE,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (vegetable_id) REFERENCES vegetables(id) ON DELETE CASCADE,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
+
+    INSERT INTO vegetables (name, price, available) VALUES
+    ('Tomato', 20.00, TRUE),
+    ('Potato', 30.00, TRUE),
+    ('Onion', 25.00, TRUE),
+    ('Carrot', 40.00, TRUE),
+    ('Spinach', 15.00, TRUE);
+
